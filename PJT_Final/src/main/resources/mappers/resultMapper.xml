@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.tennis.model.dao.ResultDao">
+	<insert id="insertMatch" parameterType="Result">
+  		Insert INTO MatchResult
+  		VALUES (0,#{user1},#{user2},now(),#{user1Phone},#{user2Phone},#{user1Name},#{user2Name},null,null)
+  	</insert>
+	<select id="finishMatch" resultType="Result" parameterType="String">
+		SELECT match_Id as mId, match_u1 as user1, match_u2 as user2,match_date as mDate,match_u1phone as user1Phone,match_u2phone as user2Phone,match_u1name as user1Name,match_u2name as user2Name, match_fdate as fDate, match_result as result
+		FROM MatchResult
+		where (match_u1=#{match_u1} or match_u2=#{match_u1} ) and match_result is not null order by match_fdate DESC
+	</select>
+	
+	<select id="matchNow" resultType="Result" parameterType="String">
+		SELECT match_Id as id, match_u1 as user1, match_u2 as user2,match_date as mDate,match_u1phone as user1Phone,match_u2phone as user2Phone,match_u1name as user1Name,match_u2name as user2Name, match_fdate as fDate, match_result as result
+		FROM MatchResult
+		where (match_u1=#{match_u1} or match_u2=#{match_u1} ) and match_result is null
+	</select>
+	
+	<update id="updateMatch" parameterType="Result">
+		UPDATE MatchResult
+ 		SET match_fdate = #{fDate}, match_result=#{result}
+ 		WHERE match_Id = #{id}
+	</update>
+	
+	<select id="nowUserPast" resultType="Result" parameterType="Result">
+		SELECT match_Id as mId, match_u1 as user1, match_u2 as user2,match_date as mDate,match_u1phone as user1Phone,match_u2phone as user2Phone,match_u1name as user1Name,match_u2name as user2Name, match_fdate as fDate, match_result as result
+		FROM MatchResult
+		where (match_u1=#{user1} or match_u2=#{user1} ) and (match_u1=#{user2} or match_u2=#{user2} ) and match_result is not null order by match_fdate DESC
+	</select>
+	
+	<update id="matchEnd" parameterType="Result">
+		UPDATE user
+ 		SET user_status=0
+ 		WHERE user_loginId = #{user1} or user_loginId = #{user2}
+	</update>
+	
+	
+	
+	
+	
+</mapper>

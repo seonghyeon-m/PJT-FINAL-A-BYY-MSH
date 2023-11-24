@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.tennis.model.dao.WaitDao">
+
+	<insert id="sendWait" parameterType="Wait">
+  		Insert INTO MatchWait
+  		VALUES (0,#{receiver},#{sender},#{status},#{match},now(),#{user1Phone},#{user2Phone},#{receiverName},#{senderName})
+  	</insert>
+	
+	<update id="acceptWait" parameterType="Wait">
+		UPDATE MatchWait
+ 		SET wait_status = 1
+ 		WHERE wait_receiver=#{receiver} and wait_sender=#{sender}
+	</update>
+	
+	<delete id="deleteWait" parameterType="Wait">
+		DELETE FROM MatchWait
+		WHERE wait_receiver=#{receiver} or wait_sender=#{wait_sender}
+	</delete>
+	
+	<delete id="declineWait" parameterType="Wait">
+		DELETE FROM MatchWait
+		WHERE wait_sender=#{wait_sender}
+	</delete>
+	
+	
+	<select id="acceptRes" resultType="Wait" parameterType="String">
+		SELECT wait_receiver as receiver,wait_sender as sender,wait_status as status,wait_match as match1,wait_mdate as mdate, wait_user1phone as user1Phone, wait_user2phone as user2Phone, wait_receivername as receiverName, wait_sendername as senderName 
+		FROM MatchWait
+		WHERE wait_receiver	=#{wait_receiver}
+	</select>
+	
+	<select id="sendReq" resultType="Wait" parameterType="String">
+		SELECT wait_receiver as receiver,wait_sender as sender,wait_status as status,wait_match as match1,wait_mdate as mdate, wait_user1phone as user1Phone, wait_user2phone as user2Phone, wait_receivername as receiverName, wait_sendername as senderName
+		FROM MatchWait
+		WHERE wait_sender=#{wait_sender}
+	</select>
+	
+	<update id="matchStart" parameterType="Wait">
+		UPDATE user
+ 		SET user_status=1
+ 		WHERE user_loginId = #{receiver} or user_loginId = #{sender}
+	</update>
+</mapper>

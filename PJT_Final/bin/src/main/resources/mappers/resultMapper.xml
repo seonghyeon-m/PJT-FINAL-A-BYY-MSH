@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.tennis.model.dao.ResultDao">
+	<insert id="insertMatch" parameterType="Result">
+  		Insert INTO MatchResult
+  		VALUES (0,#{match_u1},#{match_u2},#{match_date},#{match_fdate},#{match_result})
+  	</insert>
+	<select id="finishMatch" resultType="Result" parameterType="String">
+		SELECT match_u1 as user1, match_u2 as user2, match_fdate as fDate, match_result as result
+		FROM MatchResult
+		where match_u1=#{match_u1} and match_result is not null
+	</select>
+	
+	<select id="matchNow" resultType="Result" parameterType="String">
+		SELECT match_Id as mId, match_u1 as user1, match_u2 as user2,match_date as mDate match_fdate as fDate, match_result as result
+		FROM MatchResult
+		where match_u1=#{match_u1} and match_result is null
+	</select>
+	
+	<update id="updateMatch" parameterType="Result">
+		UPDATE MatchResult
+ 		SET match_fdate = #{match_fdate}, match_result=#{match_result}
+ 		WHERE match_Id = #{match_Id}
+	</update>
+	
+	
+	
+	
+	
+</mapper>
